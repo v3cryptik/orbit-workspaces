@@ -143,6 +143,7 @@ export async function initializeModels() {
   ).initializeCollaborationModels();
   await (await import("./mail.ts")).initializeMailModel();
   await (await import("./planning-data.ts")).initializePlanningModels();
+  await (await import("./storage.ts")).initializeStorageModel();
 }
 export async function findUser(email: string) {
   return User.findOne({ email }).select("+passwordHash");

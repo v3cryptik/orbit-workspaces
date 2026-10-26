@@ -7,6 +7,8 @@ import {
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { ApiError } from "./data.ts";
+import mongoose, { Schema } from "mongoose";
+import { tenantGuard, runWorkspace } from "./tenant.ts";
 export interface ObjectStore {
   put(key: string, bytes: Buffer): Promise<void>;
   get(key: string): Promise<Buffer>;
@@ -38,6 +40,46 @@ export class LocalStore implements ObjectStore {
     }
   }
 }
+const storedFileSchema = new Schema(
+  {
+    workspaceId: { type: Schema.Types.ObjectId, required: true, index: true },
+    key: { type: String, required: true },
+    bytes: { type: Buffer, required: true },
+  },
+  { timestamps: true },
+);
+storedFileSchema.index({ workspaceId: 1, key: 1 }, { unique: true });
+storedFileSchema.plugin(tenantGuard);
+const StoredFile = mongoose.model("StoredFile", storedFileSchema);
+export async function initializeStorageModel() {
+  await StoredFile.init();
+}
+// Keys originate from guarded attachment metadata. Scope every object operation by
+// its workspace prefix, including background deletion jobs without a request context.
+export class MongoStore implements ObjectStore {
+  async put(key: string, bytes: Buffer) {
+    safeKey(key);
+    if (!bytes.length || bytes.length > maxFileSize)
+      throw new ApiError(400, "Choose a nonempty file up to 10 MB.");
+    await runWorkspace(key.split("/")[0], async () => {
+      await StoredFile.create({ workspaceId: key.split("/")[0], key, bytes });
+    });
+  }
+  async get(key: string) {
+    safeKey(key);
+    return runWorkspace(key.split("/")[0], async () => {
+      const file = await StoredFile.findOne({ key }).select("bytes");
+      if (!file) throw new ApiError(404, "File not found.");
+      return Buffer.from(file.bytes);
+    });
+  }
+  async remove(key: string) {
+    safeKey(key);
+    await runWorkspace(key.split("/")[0], async () => {
+      await StoredFile.deleteOne({ key });
+    });
+  }
+}
 export class S3Store implements ObjectStore {
   constructor(
     private bucket: string,
@@ -67,6 +109,12 @@ export class S3Store implements ObjectStore {
   }
 }
 export function configuredStore(production = false): ObjectStore {
+  if (process.env.FILE_STORAGE === "mongodb") return new MongoStore();
+  if (
+    process.env.FILE_STORAGE &&
+    !["s3", "local"].includes(process.env.FILE_STORAGE)
+  )
+    throw new Error("FILE_STORAGE must be mongodb, s3, or local.");
   if (process.env.S3_BUCKET)
     return new S3Store(
       process.env.S3_BUCKET,
@@ -79,7 +127,7 @@ export function configuredStore(production = false): ObjectStore {
     );
   if (production && !process.env.UPLOAD_DIRECTORY)
     throw new Error(
-      "Production requires S3_BUCKET or a persistent UPLOAD_DIRECTORY.",
+      "Production requires FILE_STORAGE=mongodb, S3_BUCKET, or a persistent UPLOAD_DIRECTORY.",
     );
   return new LocalStore(
     process.env.UPLOAD_DIRECTORY

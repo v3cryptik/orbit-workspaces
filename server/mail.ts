@@ -47,7 +47,7 @@ export async function queueInvitationMail(
 }
 type Envelope = { subject: string; text: string; url: string };
 export class MailService {
-  readonly mode: "local" | "smtp";
+  readonly mode: "local" | "smtp" | "disabled";
   private key: Buffer;
   private transport?: Transporter<any>;
   private from: string;
@@ -58,20 +58,36 @@ export class MailService {
       testing?: boolean;
       transport?: Transporter;
       from?: string;
+      mode?: "local" | "smtp" | "disabled";
     } = {},
   ) {
     this.key = createHash("sha256").update(`orbit-mail:${secret}`).digest();
     this.from =
       options.from ?? process.env.SMTP_FROM ?? "Orbit <orbit@localhost>";
+    const explicitMode =
+      options.mode ??
+      (!options.testing ? process.env.INVITATION_EMAIL_MODE : undefined);
+    if (explicitMode && !["local", "smtp", "disabled"].includes(explicitMode))
+      throw new Error(
+        "INVITATION_EMAIL_MODE must be local, smtp, or disabled.",
+      );
     this.mode =
-      options.transport || (!options.testing && process.env.SMTP_HOST)
+      (explicitMode as typeof this.mode) ??
+      (options.transport || (!options.testing && process.env.SMTP_HOST)
         ? "smtp"
-        : "local";
-    if (options.production && this.mode !== "smtp")
+        : "local");
+    if (options.production && this.mode === "local")
       throw new Error(
         "Production invitation delivery requires SMTP_HOST and SMTP_FROM.",
       );
-    if (options.production && !options.from && !process.env.SMTP_FROM)
+    if (this.mode === "smtp" && !options.transport && !process.env.SMTP_HOST)
+      throw new Error("SMTP mode requires SMTP_HOST.");
+    if (
+      options.production &&
+      this.mode === "smtp" &&
+      !options.from &&
+      !process.env.SMTP_FROM
+    )
       throw new Error("Production invitation delivery requires SMTP_FROM.");
     this.transport =
       options.transport ??
@@ -165,6 +181,11 @@ export class MailService {
     return this.decrypt((await this.job(actor, id)).encrypted);
   }
   async retry(actor: Actor, id: string) {
+    if (this.mode === "disabled")
+      throw new ApiError(
+        409,
+        "Email delivery is disabled. Share the invitation link directly.",
+      );
     const job = await this.job(actor, id);
     if (!(await invitationPending(String(job.invitationId))))
       throw new ApiError(
@@ -234,8 +255,13 @@ export class MailService {
             { _id: job._id },
             {
               $set: {
-                status: this.mode === "local" ? "local" : "sent",
-                sentAt: new Date(),
+                status:
+                  this.mode === "disabled"
+                    ? "disabled"
+                    : this.mode === "local"
+                      ? "local"
+                      : "sent",
+                sentAt: this.mode === "disabled" ? null : new Date(),
               },
               $unset: { leaseUntil: 1 },
             },

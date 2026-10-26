@@ -67,6 +67,13 @@ export function createApp(config: AppConfig) {
   if (config.secret.length < 32)
     throw new Error("JWT_SECRET must contain at least 32 characters.");
   const app = express();
+  // Explicit opt-in for the single trusted Render reverse proxy. Never trust all proxies.
+  if (process.env.TRUST_PROXY_HOPS && !config.testing) {
+    const hops = Number(process.env.TRUST_PROXY_HOPS);
+    if (!Number.isInteger(hops) || hops < 1 || hops > 3)
+      throw new Error("TRUST_PROXY_HOPS must be 1, 2, or 3.");
+    app.set("trust proxy", hops);
+  }
   const services = config.services ?? {
     store: config.testing
       ? new LocalStore()
@@ -438,7 +445,12 @@ export function createApp(config: AppConfig) {
     res.status(201).json({
       url: `${config.origin}/?invite=${encodeURIComponent(token)}`,
       expiresAt,
-      delivery: services.mail.mode === "local" ? "local" : "queued",
+      delivery:
+        services.mail.mode === "disabled"
+          ? "disabled"
+          : services.mail.mode === "local"
+            ? "local"
+            : "queued",
     });
   });
   router.delete("/invites/:id", manager, async (req, res) => {
