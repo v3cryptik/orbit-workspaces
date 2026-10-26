@@ -632,13 +632,19 @@ export function MailDeliveryPanel({
           Invitation delivery
         </h2>
         <span className="mail-mode">
-          {data.mode === "local" ? "Private local mailbox" : "SMTP delivery"}
+          {data.mode === "disabled"
+            ? "Link invitations"
+            : data.mode === "local"
+              ? "Private local mailbox"
+              : "SMTP delivery"}
         </span>
       </div>
       <p className="mail-intro">
         {data.mode === "local"
           ? "Invitation emails are captured here for local testing. They are not sent externally."
-          : "Queued invitation emails are sent by your configured mail provider."}
+          : data.mode === "disabled"
+            ? "Email delivery is off for this preview. Create an invitation and share its copyable link directly."
+            : "Queued invitation emails are sent by your configured mail provider."}
       </p>
       {data.deliveries.length ? (
         data.deliveries.map((item) => (
@@ -665,7 +671,7 @@ export function MailDeliveryPanel({
                 Preview
               </button>
             )}
-            {item.status === "failed" && (
+            {item.status === "failed" && data.mode !== "disabled" && (
               <button
                 className="text-button"
                 onClick={async () => {
