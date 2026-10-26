@@ -4,6 +4,8 @@ Phases 1–4 of the supplied **Project 13: Project Management SaaS with Multi-Te
 
 ## Run locally
 
+For the temporary hosted preview, see [preview deployment](docs/preview-deployment.md) and `render.yaml`. Preview mode can use MongoDB for durable attachments and explicit link-only invitations. It retains production authentication and tenant checks; the rest of Phase 5 is still outstanding.
+
 Requires Node.js 22.12+ (verified here with Node 24). From this folder:
 
 ```powershell
@@ -135,7 +137,7 @@ Phase 3 added authenticated live connections, comments/mentions, recipient-only 
 
 Phase 4 adds 27 planning/time/report tests, bringing the combined suite to 109. See [phase-4 verification](docs/phase-4-verification.md) for browser checks, restart persistence, responsive evidence, report definitions, and limits. Time activity follows the same privacy rules as timesheets: members see their own entries, managers see team entries, and guests do not see time events.
 
-The build runs strict TypeScript checking, builds the React frontend, and bundles the Node server. It does not deploy anything.
+The build runs strict TypeScript checking, builds the React frontend, and bundles the Node server. It does not deploy anything. Preview deployment preparation adds seven tests for durable MongoDB attachments, explicit disabled email delivery, and production cookie/origin protections (116 tests total).
 
 ## Production preparation (phase 5)
 
@@ -143,7 +145,7 @@ Copy `.env.example` to `.env`, supply a real MongoDB **replica set** URI (Atlas 
 
 The current deployment shape serves frontend and API from one origin. The brief's split Vercel + Render/Railway hosting requires a reviewed same-origin API and WebSocket proxy or a reviewed cross-origin cookie/CSRF configuration; simply changing the API URL is insufficient. Configure proxy trust for the known hosting topology before relying on IP-based rate limits behind a reverse proxy. Staging must have a separate database and signing secret. Configure and verify external services, add monitoring, and complete live two-device tests before calling this production-ready.
 
-Configure SMTP/S3/Redis using the names in `.env.example`; keep real values in an untracked `.env` or your host's secret store. Production requires real SMTP configuration and either S3 or a persistent `UPLOAD_DIRECTORY` in addition to the phase-1 database/origin/secret requirements. Keep the S3 bucket private. Use a dedicated authenticated Redis instance with TLS for remote access. Multi-server setups need shared S3 storage and Redis; durable local folders belong to single-server setups. Socket.IO here uses WebSockets in the browser, so the host must support upgrades at `/api/socket.io`. Redis coordination is implemented but has not been exercised against a real Redis deployment here.
+Configure SMTP/S3/Redis using the names in `.env.example`; keep real values in an untracked `.env` or your host's secret store. Production requires SMTP unless `INVITATION_EMAIL_MODE=disabled` explicitly enables link-only invitations. Durable files require S3, a persistent `UPLOAD_DIRECTORY`, or `FILE_STORAGE=mongodb` for a small preview. Keep the S3 bucket private. Use a dedicated authenticated Redis instance with TLS for remote access. Multi-server setups need shared durable storage and Redis; local folders belong to single-server setups. Socket.IO here uses WebSockets in the browser, so the host must support upgrades at `/api/socket.io`. Redis coordination is implemented but has not been exercised against a real Redis deployment here. See the preview deployment guide for the limited free-hosting setup.
 
 The local fallback is for development only: it binds to loopback and does not enable database authentication. Do not expose it to a network.
 

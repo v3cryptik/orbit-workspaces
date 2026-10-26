@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: orbit-workspaces-preview
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 24
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: APP_ORIGIN
+        sync: false
+      - key: FILE_STORAGE
+        value: mongodb
+      - key: INVITATION_EMAIL_MODE
+        value: disabled
+      - key: TRUST_PROXY_HOPS
+        value: 1
