@@ -1,0 +1,548 @@
+.live-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #9a839e;
+  white-space: nowrap;
+}
+.live-status > span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c1ab92;
+}
+.live-status.online > span {
+  background: #8aa28e;
+  box-shadow: 0 0 0 3px #8aa28e0c;
+}
+.notification-bell {
+  position: relative;
+}
+.notification-bell > i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #8b70c4;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  box-shadow: 0 0 0 2px white;
+}
+.unread-count {
+  background: #e5ddf4 !important;
+  color: #82669e !important;
+}
+.task-collaboration {
+  margin-top: 29px;
+  padding-top: 25px;
+  border-top: 1px solid #ece2f2;
+}
+.task-collaboration .section-heading h2,
+.mail-delivery-panel .section-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #80608d;
+}
+.task-collaboration h2 > span {
+  font-size: 9px;
+  font-weight: 400;
+  background: #f2ecf8;
+  padding: 3px 5px;
+  border-radius: 4px;
+  color: #9278a2;
+}
+.task-collaboration .text-button {
+  font-size: 10px;
+}
+.collab-empty {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #93779f;
+  padding: 3px 0 12px;
+}
+.attachment-hint {
+  font-size: 9px;
+  color: #a78ab4;
+  margin-top: 9px;
+  line-height: 1.7;
+}
+.attachment-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 0;
+  border-bottom: 1px solid #f0e9f4;
+  color: #a388b2;
+}
+.attachment-row > span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.attachment-row strong {
+  font-size: 11px;
+  color: #86628f;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.attachment-row small {
+  font-size: 9px;
+  color: #a084ac;
+}
+.attachment-row > .icon-button {
+  width: 25px;
+  height: 25px;
+}
+.comments-heading {
+  margin-top: 30px;
+}
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.comment-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.comment-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  background: #ede5f5;
+  border: 1px solid #e7ddf0;
+  border-radius: 50%;
+  font-size: 9px;
+  color: #91749f;
+  font-weight: 500;
+}
+.comment-row > div {
+  flex: 1;
+  min-width: 0;
+}
+.comment-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  line-height: 1.7;
+}
+.comment-author strong {
+  font-size: 11px;
+  font-weight: 550;
+  color: #795486;
+}
+.comment-author time,
+.comment-author small {
+  font-size: 9px;
+  color: #ab8eb8;
+}
+.comment-row p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #866492;
+  margin-top: 7px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 7px;
+}
+.comment-actions > button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 9px;
+  color: #a386b2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.comment-actions > button:hover {
+  color: var(--accent);
+}
+.comment-compose {
+  margin-top: 25px;
+  position: relative;
+  border: 1px solid #e8daef;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+}
+.comment-compose textarea {
+  font-size: 12px;
+  border: 0;
+  box-shadow: none;
+  padding: 2px 0 5px;
+  min-height: 80px;
+  line-height: 1.8;
+  color: #80548f;
+  resize: vertical;
+}
+.comment-compose textarea::placeholder {
+  color: #af94bd;
+}
+.comment-compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #f2eaf7;
+}
+.comment-compose-footer small {
+  font-size: 9px;
+  color: #a98bb6;
+  line-height: 1.6;
+}
+.comment-compose-footer .button {
+  font-size: 10px;
+  min-height: 32px;
+  padding: 6px 10px;
+}
+.mention-suggestions {
+  margin: 0 -3px 6px;
+  border: 1px solid #e3d5ed;
+  border-radius: 6px;
+  background: white;
+  box-shadow: 0 3px 16px #3a18400e;
+  max-height: 230px;
+  overflow: auto;
+}
+.mention-suggestions > button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  background: transparent;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+}
+.mention-suggestions > button:hover,
+.mention-suggestions > button:focus-visible {
+  background: #f4eef9;
+}
+.mention-suggestions > button > span:last-child {
+  font-size: 11px;
+  color: #8b6599;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mention-suggestions small {
+  font-size: 9px;
+  color: #ac8fba;
+}
+.editing-comment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 10px;
+  color: #9d7bab;
+}
+.collab-confirm {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px;
+  border: 1px solid #f0dbe5;
+  background: #fdf7fa;
+  border-radius: 6px;
+  font-size: 10px;
+  color: #b08b9c;
+  margin-top: 16px;
+}
+.collab-confirm > span {
+  flex: 1;
+}
+.inbox-toolbar {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 15px;
+  margin-bottom: 4px;
+}
+.inbox-toolbar > button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 12px;
+  color: #937ca0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.inbox-toolbar > button.selected {
+  color: #70538a;
+  font-weight: 550;
+}
+.inbox-toolbar span {
+  background: #eee7f6;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+}
+.notification-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 22px 15px;
+  border-bottom: 1px solid #eee7f3;
+  transition: background 0.15s;
+}
+.notification-row.unread {
+  background: #f6f2fb;
+}
+.notification-row:hover {
+  background: #f4eff9;
+}
+.notification-symbol {
+  width: 33px;
+  height: 33px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #eee5f6;
+  color: #9b7db0;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+.notification-open {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.notification-open > strong {
+  font-size: 12px;
+  font-weight: 500;
+  color: #7a568a;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.notification-open > span {
+  font-size: 12px;
+  color: #92729f;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.notification-open > small {
+  font-size: 10px;
+  color: #a58ab3;
+  margin-top: 3px;
+}
+.notification-row > .icon-button {
+  width: 25px;
+  height: 25px;
+}
+.inbox-empty {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #b198c3;
+  padding: 45px 20px;
+}
+.inbox-empty h2 {
+  font-size: 20px;
+  font-weight: 450;
+  color: #82618f;
+  margin-top: 20px;
+}
+.inbox-empty p {
+  font-size: 12px;
+  color: #a387b0;
+  line-height: 1.7;
+  margin-top: 11px;
+}
+.mail-delivery-panel {
+  margin-top: 36px;
+  padding-top: 25px;
+  border-top: 1px solid #eae2f0;
+}
+.mail-mode {
+  font-size: 9px;
+  background: #f0e9f6;
+  border-radius: 4px;
+  padding: 4px 6px;
+  color: #9d7fae;
+}
+.mail-intro {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #9c7fa9;
+  margin: 0 0 15px;
+}
+.mail-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #ede5f3;
+  color: #ad8fbc;
+}
+.mail-row > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+.mail-row strong {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8c669b;
+  overflow-wrap: anywhere;
+}
+.mail-row small {
+  font-size: 9px;
+  color: #af91bd;
+}
+.mail-row .text-button {
+  font-size: 10px;
+}
+.delivery-status {
+  font-size: 9px;
+  text-transform: capitalize;
+  border-radius: 4px;
+  padding: 4px 7px;
+  background: #f0eaf6;
+  color: #aa8cba;
+}
+.delivery-status.sent,
+.delivery-status.local {
+  background: #eef3ef;
+  color: #7d9987;
+}
+.delivery-status.failed {
+  background: #fbf0f1;
+  color: #b48990;
+}
+.mail-preview {
+  border: 1px solid #e5d7ee;
+  border-radius: 8px;
+  padding: 19px;
+  margin-top: 20px;
+  background: #fdfbff;
+}
+.mail-preview > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.mail-preview strong {
+  font-size: 13px;
+  font-weight: 500;
+  color: #8b639b;
+}
+.mail-preview pre {
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #92729f;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 18px 0;
+}
+.mail-preview .button {
+  font-size: 11px;
+}
+.task-collaboration .work-error {
+  flex-wrap: wrap;
+}
+.task-collaboration .work-error > span {
+  flex: 1;
+  min-width: 200px;
+}
+@media (max-width: 680px) {
+  .live-status {
+    font-size: 9px;
+  }
+  .topbar-right {
+    gap: 4px;
+  }
+  .topbar-right > .today {
+    display: none;
+  }
+  .notification-row {
+    padding: 18px 8px;
+    gap: 11px;
+  }
+  .notification-open > strong,
+  .notification-open > span {
+    font-size: 11px;
+  }
+  .notification-open > small {
+    font-size: 9px;
+  }
+  .notification-symbol {
+    width: 29px;
+    height: 29px;
+  }
+  .mail-delivery-panel .section-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .mail-row {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .mail-row > span:nth-child(2) {
+    min-width: 160px;
+  }
+  .mail-preview {
+    padding: 15px;
+  }
+  .mail-preview pre {
+    font-size: 11px;
+  }
+  .comment-compose-footer {
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .comment-compose-footer small {
+    font-size: 8px;
+  }
+  .comment-author time {
+    font-size: 8px;
+  }
+  .comment-author {
+    gap: 5px;
+  }
+  .comment-row p {
+    font-size: 12px;
+  }
+  .attachment-row {
+    gap: 7px;
+  }
+  .attachment-row small {
+    font-size: 8px;
+  }
+  .inbox-view .page-heading .button {
+    font-size: 10px;
+  }
+}
