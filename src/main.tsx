@@ -499,7 +499,9 @@ function InviteForm({
       <p className="fine-print">
         {delivery === "queued"
           ? "The invitation email is queued for delivery. You can also share the link directly."
-          : "The invitation email is captured in your private local mailbox under Members. No external email was sent."}
+          : delivery === "disabled"
+            ? "Email delivery is off for this preview. Copy and share the invitation link directly."
+            : "The invitation email is captured in your private local mailbox under Members. No external email was sent."}
       </p>
     </div>
   ) : (
